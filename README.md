@@ -3,8 +3,8 @@
 
 |  일정  |  강의 주제 |  이론 및 실습 조교 | 강의계획서 | 실습자료 | 
 |:--:|:--:|:--:|:--:|:--:|
-| 1일차(3/2) |  프로젝트 및 세부기술 소개 (개념 잡기)  | 최유경 교수님 |  |  |
-| 1일차(3/2) |  Embedded Grabber  | 김태주 | [강의계획서](https://github.com/sejong-rcv/2020.RCVWS/files/4271946/0302.Sejong.RCV.Winter.School.2020.Kim.Tae-joo.docx) |  |
+| 1일차(3/2)-1 |  프로젝트 및 세부기술 소개 (개념 잡기)  | 최유경 교수님 |  |  |
+| 1일차(3/2)-2 |  Embedded Grabber  | 김태주 | [강의계획서](https://github.com/sejong-rcv/2020.RCVWS/files/4271946/0302.Sejong.RCV.Winter.School.2020.Kim.Tae-joo.docx) |  |
 | 2일차(3/3) |  Camera Calibration  | 신정민 | [강의계획서](https://github.com/sejong-rcv/2020.RCVWS/files/4271947/0303.Sejong.RCV.Winter.School.2020.Shin.Jung-min.docx) |  | 
 | 3일차(3/4) |  Stereo Vision  | 조원 | [강의계획서](https://github.com/sejong-rcv/2020.RCVWS/files/4271948/0304.Sejong.RCV.Winter.School.2020.Jo-won.docx) |  | 
 | 4일차(3/5) |  Annotation  | 황유진 | [강의계획서](https://github.com/sejong-rcv/2020.RCVWS/files/4271949/0305.Sejong.RCV.Winter.School.2020.yj.docx) |  | 
