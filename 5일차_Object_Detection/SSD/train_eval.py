@@ -55,14 +55,13 @@ best_loss = 100.
 workers = 10
 print_freq = 10 
 lr = 1e-3  
-n_classes = 2
 momentum = 0.9 
 weight_decay = 5e-4 
 grad_clip = None 
-port = 8807
 cudnn.benchmark = True
 ori_size = (422, 538)
 ori_size_out = [422,538]
+n_classes = 2
 
 # random seed fix 
 torch.manual_seed(9)
@@ -153,7 +152,6 @@ def main():
     tensorboard_dir    = os.path.join( jobs_dir, 'tensorboardX' )
     if not os.path.exists(snapshot_dir):        os.makedirs(snapshot_dir)
     if not os.path.exists(tensorboard_dir):     os.makedirs(tensorboard_dir)
-    run_tensorboard( tensorboard_dir, port )
     
     import tarfile
     tar = tarfile.open( os.path.join(jobs_dir, 'sources.tar'), 'w' )
@@ -165,8 +163,6 @@ def main():
         tar.add( file )
 
     tar.close()
-
-    writer = SummaryWriter(os.path.join(jobs_dir, 'tensorboardX'))
 
     logger = logging.getLogger()
     logger.setLevel(logging.INFO)
@@ -204,21 +200,19 @@ def main():
                            criterion=criterion,
                            optimizer=optimizer,
                            epoch=epoch,
-                           logger=logger,
-                           writer=writer)
+                           logger=logger)
 
         optim_scheduler.step()
 
-        writer.add_scalars('train/epoch', {'epoch_train_loss': train_loss},global_step=epoch )
         save_checkpoint(epoch, model, optimizer, train_loss, jobs_dir)
         
         if epoch >= 1 :
-            evaluate_coco(test_loader, model, epoch,jobs_dir,writer)
+            evaluate_coco(test_loader, model, epoch,jobs_dir)
             
 
 
 
-def train(train_loader, model, criterion, optimizer, epoch, logger, writer):
+def train(train_loader, model, criterion, optimizer, epoch, logger):
 
     model.train() 
 
@@ -261,12 +255,6 @@ def train(train_loader, model, criterion, optimizer, epoch, logger, writer):
 
         start = time.time()
 
-        if batch_idx and batch_idx % print_freq == 0:
-            import pdb;         
-            writer.add_scalars('train/loss', {'loss': losses.avg}, global_step=epoch*len(train_loader)+batch_idx )
-            writer.add_scalars('train/loc', {'loss': losses_loc.avg}, global_step=epoch*len(train_loader)+batch_idx )                
-            writer.add_scalars('train/cls', {'loss': losses_cls.avg}, global_step=epoch*len(train_loader)+batch_idx )
-
         if batch_idx % print_freq == 0:
 
             logger.info('Epoch: [{0}][{1}/{2}]\t'
@@ -280,7 +268,7 @@ def train(train_loader, model, criterion, optimizer, epoch, logger, writer):
     del predicted_locs, predicted_scores, image_vis, image_lwir, boxes, labels
     return  losses.avg
 
-def evaluate_coco(test_loader, model,epoch,jobs_dir,writer):
+def evaluate_coco(test_loader, model,epoch,jobs_dir):
 
     fig_test,  ax_test  = plt.subplots(figsize=(18,15))
 
@@ -335,8 +323,7 @@ def evaluate_coco(test_loader, model,epoch,jobs_dir,writer):
         curPerf = cocoEval.summarize(0)    
 
         cocoEval.draw_figure(ax_test, rstFile.replace('json', 'jpg'))        
-        writer.add_scalars('LAMR/fppi', {'test': curPerf}, epoch)
-        
+
         print('Recall: {:}'.format( 1-cocoEval.eval['yy'][0][-1] ) )
 
     except:
