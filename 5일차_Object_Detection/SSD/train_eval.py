@@ -5,7 +5,7 @@ import torch.utils.data
 import torch.utils.data as data
 import argparse
 
-from model import SSD300, MultiBoxLoss
+from model import Sejong_PD, MultiBoxLoss
 from datasets import *
 from utils import *
 from torchcv.datasets.transforms import *
