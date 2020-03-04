@@ -483,7 +483,6 @@ class MultiBoxLoss(nn.Module):
 
         conf_loss_pos = conf_loss_all[positive_priors]  
         
-        asing loss and take top n_hard_negatives
         conf_loss_neg = conf_loss_all.clone() 
         conf_loss_neg[positive_priors] = 0. 
         conf_loss_neg, _ = conf_loss_neg.sort(dim=1, descending=True) 
