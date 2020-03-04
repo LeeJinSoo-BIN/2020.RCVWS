@@ -9,7 +9,7 @@ import numpy as np
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # Load model checkpoint
-checkpoint = './jobs/2020-02-11_17h20m_train_SF+_POTENIT_Hard_OCc/checkpoint_ssd300.pth.tar026'
+checkpoint = './jobs/2020-03-04_13h17m_test/checkpoint_ssd300.pth.tar002'
 checkpoint = torch.load(checkpoint)
 start_epoch = checkpoint['epoch'] + 1
 print('\nLoaded checkpoint from epoch %d.' % (start_epoch))
@@ -22,7 +22,7 @@ resize = transforms.Resize((512, 640))
 to_tensor = transforms.ToTensor()
 normalize_vis = transforms.Normalize(mean=[0.5873, 0.5328, 0.4877],std=[0.2331, 0.2160, 0.2010])
 normalize_lwir = transforms.Normalize(mean=[0.4126],std=[0.1453])
-ori_size_out = [442,538]
+ori_size_out = [422,538]
 
 #Data load
 DB_ROOT = './datasets/New_Sejong_RCV_dataset'
@@ -57,7 +57,7 @@ def detect(original_image, lwir_image, min_score, max_overlap, top_k, suppress=N
     image_lwir = image_lwir.to(device)
 
     # Forward prop.
-    predicted_locs, predicted_scores = model(image_vis.unsqueeze(0),image_lwir.unsqueeze(0))
+    predicted_locs, predicted_scores = model(image_vis.unsqueeze(0))
 
     # Detect objects in SSD output
     det_boxes, det_labels, det_scores = model.detect_objects(predicted_locs, predicted_scores, min_score=min_score,
@@ -122,10 +122,8 @@ if __name__ == '__main__':
         
         frame_id = ids[ii]
 
-        # vis = resize(Image.open(imgpath_vis_New_Sejong%(DB_ROOT,frame_id[1][0],frame_id[1][1][-7:])))
-        # lwir = resize(Image.open(imgpath_lwir_New_Sejong%(DB_ROOT,frame_id[1][0],frame_id[1][1][-7:])))
-        vis = resize(Image.open('./datasets/kaist-rgbt/images/set08/V002/visible/I00491.jpg'))
-        lwir = resize(Image.open('./datasets/kaist-rgbt/images/set08/V002/lwir/I00491.jpg')).convert('L')
+        vis = resize(Image.open(imgpath_vis_New_Sejong%(DB_ROOT,frame_id[1][0],frame_id[1][1][-7:])))
+        lwir = resize(Image.open(imgpath_lwir_New_Sejong%(DB_ROOT,frame_id[1][0],frame_id[1][1][-7:])))
 
         annotate_lwir = detect(vis, lwir, min_score=0.8, max_overlap=0.5, top_k=200)
         annotate_lwir.save('./Detection_visualization/I{:06d}.jpg'.format(ii))
