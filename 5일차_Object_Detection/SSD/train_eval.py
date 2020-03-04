@@ -55,6 +55,7 @@ best_loss = 100.
 workers = 10
 print_freq = 10 
 lr = 1e-3  
+n_classes = 2
 momentum = 0.9 
 weight_decay = 5e-4 
 grad_clip = None 
